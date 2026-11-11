@@ -5,8 +5,20 @@ from pathlib import Path
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QApplication, QLabel
+import signal
 
 ASSETS = Path(__file__).parent / "assets"
+# IMAGES = {
+#     "happy": "CatHappy.png",
+#     "sad":"",
+#     "angry":"",
+#     "hungry":"",
+#     "annoyed":"",
+#     "eating":"",
+#     "petted":"",
+#     "sleeping":"",
+#     "speeking":""
+# }
 
 class Window(QLabel):
     def __init__(self, cat, size: int = 150, parent=None):
@@ -100,4 +112,5 @@ class Window(QLabel):
 def run() -> None:
     app = QApplication.instance()
     if app is not None:
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
         app.exec()

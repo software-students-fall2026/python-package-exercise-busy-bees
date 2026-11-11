@@ -1,4 +1,5 @@
 import random
+import time
 # Defines the states up front so everyone builds off of the same attributes/methods
 
 MOODS = ("happy", "sad", "angry", "tired", "hungry", "annoyed")
@@ -87,6 +88,7 @@ class Cat:
             if self.sleepiness == 0:
                 return f"{self.name} is already fully rested."
 
+            self.last_action = "sleeping"
             self.sleepiness = max(self.sleepiness - (hours*2), 0)
 
             if self.sleepiness == 0:
@@ -118,8 +120,91 @@ class Cat:
         self.name = name
         return f"{old_name} is now called {self.name}!"
 
-    def say(self, text):
-        raise NotImplementedError
+    def say(self, msg):
+        if not isinstance(msg, str):
+            raise TypeError("Message must be a string")
+        if not msg.strip():
+            raise ValueError("Message cant be empty")
+        if len(msg) > 150:
+            raise ValueError("Message must be fewer than 150 characters")
+
+        save_mood = self.render()
+        self.message = msg.strip()
+        print(f"{self.name}: {self.message}")
+
+        self.message = ""
+        print(save_mood)
 
     def render(self):
-        raise NotImplementedError
+        moodsArt = {
+            "happy": r"""
+ /\_/\
+( ^w^ )
+ > ^ < 
+ """,
+            "sad": r"""
+ /\_/\
+( T.T )
+ > ^ <
+""",
+            "angry": r"""
+ /\_/\
+( >.< )
+ > ^ <
+""",
+            "tired": r"""
+ /\_/\
+( -.- )
+ > ^ <
+""",
+            "hungry": r"""
+ !/\_/\!
+!( OwO )!
+ !> ~ <!
+""",
+            "annoyed": r"""
+ /\_/\
+( -_- )
+ > ^ <
+"""
+        }
+
+        actions = {
+            "eating": r"""
+ /\_/\
+( ^o^ )  <><
+ > ^ <
+""",
+            "petted": r"""
+ /\_/\
+( ^w^ )
+ > ^ < 
+""",
+            "sleeping": r"""
+            Zzz..
+ /\_/\ 
+( -.- )
+__Q__Q__
+""",
+            "speaking": r"""
+ /\_/\
+( ^o^ )
+ > ^ < 
+"""
+        }
+
+        state = self.visual_state()
+
+        if state in actions: 
+            return actions[state].strip("\n")
+        return moodsArt.get(state, moodsArt["happy"]).strip("\n")
+
+    def visual_state(self):
+        if self.last_action in ("eating", "petted","sleeping","speaking"):
+            return self.last_action
+        if self.hunger >= 8:
+            return "hungry"
+        if self.sleepiness >= 8:
+            return "tired"
+        return self.mood
+        

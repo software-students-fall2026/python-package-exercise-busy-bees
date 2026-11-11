@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 desktop-cat = {path = ".", editable = true}
 pyside6-essentials = "*"
+pyside6 = "*"
 
 [dev-packages]
 pytest = "*"
