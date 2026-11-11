@@ -19,6 +19,9 @@ def main():
     # Demonstrate renaming
     print("\n" + cat.set_name("Mittens"))
 
+    # Demonstrate render
+    cat.render()
+
     # Demonstrate feeding
     print(cat.feed("fish"))
     print(cat.feed("kibble"))
